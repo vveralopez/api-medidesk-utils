@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "backend-sicomer",
   "main": "index.js",
-  "proxy": "http://localhost:3000",
   "scripts": {
     "start": "set NODE_ENV=production && node index.js",
     "build": "babel src -d lib",

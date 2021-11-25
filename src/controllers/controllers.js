@@ -1,4 +1,4 @@
-const { sicomer, acceso, data, calculo, PoolWrapper } = require('./entorno');
+const { sicomer, acceso, data, calculo } = require('./entorno');
 const jwt = require('jsonwebtoken');
 const { base64encode } = require('nodejs-base64');
 const { CommandCompleteMessage } = require('pg-protocol/dist/messages');

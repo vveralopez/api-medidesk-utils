@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const { HOST, PORT } = require('./src/controllers/config');
+const { PORT } = require('./src/controllers/config');
 
 //Middleware
 app.use(bodyParser.urlencoded({extended: false}));

@@ -18,4 +18,3 @@ module.exports = {
     secret: limpiaBase64(process.env.secreto || 'dmVybWVywqljb3B5cmlnaHRsb2dpbsO6bmljbzIwMjAK'),
     calculoVar: limpiaBase64(process.env.calculo || 'SFM1MTIK'),
 }
-

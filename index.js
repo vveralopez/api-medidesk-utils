@@ -21,7 +21,6 @@ app.use(cors());
 app.use(require('./src/routes/index'))
 
 app.listen(PORT, () => {
-  console.log(app)
   console.log(calculoVar, secret, PGUSERSICPW, PGUSERSICOM, PGUSERLOGPW, PGUSERLOGIN, PGHOSTNAME, PGPORT, PORT)
   console.log('Servidor montado en puerto: ' + PORT);
 });

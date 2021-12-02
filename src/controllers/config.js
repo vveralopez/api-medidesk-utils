@@ -7,7 +7,6 @@ const limpiaBase64 = (data) => {
 
 module.exports = {
     NODE_ENV: process.env.NODE_ENV || 'development',
-//    HOST: process.env.HOST || 'localhost',
     PORT: parseInt(limpiaBase64(process.env.PORT || 'MzAwOQo=')),
     PGPORT: parseInt(limpiaBase64(process.env.PGPORT || 'NTQzNAo=')), // )   'NTQzMgo=' 
     PGHOSTNAME: limpiaBase64(process.env.PGHOSTNAME || 'bG9jYWxob3N0Cg==' ), //--ip vps'MTYyLjIxMi4xNTMuMjI1Cg=='),

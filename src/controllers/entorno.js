@@ -1,5 +1,5 @@
 const { Pool } = require('pg');
-const { PGUSERLOGIN, PGUSERSICOM, PGUSERLOGPW, PGUSERSICPW, PGPORT, PGHOSTNAME, secret, calculoVar } = require('./config');
+const { PGUSERLOGIN, PGUSERSICOM, PGUSERLOGPW, PGUSERSICPW, PGPORT, PGHOSTNAME, SECRETO, CALCULOVAR } = require('./config');
 
 // const connStringAcceso = 'postgres://' + PGUSERLOGIN + ':' + PGUSERLOGPW + '@' + PGHOSTNAME + ':' + PGPORT + '/' + PGUSERLOGIN;
 // const connStringSicomer = 'postgres://' + PGUSERSICOM + ':' + PGUSERSICPW + '@' + PGHOSTNAME + ':' + PGPORT + '/' + PGUSERSICOM;
@@ -73,7 +73,7 @@ const PoolWrapper = {
     }
 };
 
-const data = secret;
-const calculo = calculoVar;
+const data = SECRETO;
+const calculo = CALCULOVAR;
 
 module.exports = { acceso, sicomer, data, calculo, PoolWrapper }

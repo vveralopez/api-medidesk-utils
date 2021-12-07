@@ -2,6 +2,7 @@ require('dotenv').config();
 const { base64decode } = require('nodejs-base64');
 
 const limpiaBase64 = (data) => {
+    console.log([data])
     return base64decode(data).replace("\n", "");
 }
 
@@ -14,8 +15,8 @@ module.exports = {
     PGUSERLOGPW: limpiaBase64(process.env.PGUSERLOGPW),
     PGUSERSICOM: limpiaBase64(process.env.PGUSERSICOM),
     PGUSERSICPW: limpiaBase64(process.env.PGUSERSICPW),
-    secret: limpiaBase64(process.env.secreto),
-    calculoVar: limpiaBase64(process.env.calculo),
+    SECRETO: limpiaBase64(process.env.SECRETO),
+    CALCULOVAR: limpiaBase64(process.env.CALCULOVAR),
 }
 
 // module.exports = {

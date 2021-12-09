@@ -3,6 +3,10 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
+<<<<<<< HEAD
+const congif = require('./src/controllers/config')
+=======
+>>>>>>> 119e0f4cc3abdfe48be3a7a49aae578aeb8ddb95
 
 //Middleware
 app.use(bodyParser.urlencoded({extended: false}));
@@ -19,6 +23,6 @@ app.use(cors());
 //Routes
 app.use(require('./src/routes/index'))
 
-app.listen(3000, () => {
-  console.log('Servidor montado en puerto: ' + 3000);
+app.listen(config.PORT, () => {
+  console.log('Servidor montado en puerto: ' + config.PORT || 3000);
 });

@@ -3,10 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
-<<<<<<< HEAD
-const congif = require('./src/controllers/config')
-=======
->>>>>>> 119e0f4cc3abdfe48be3a7a49aae578aeb8ddb95
+const config = require('./src/controllers/config')
 
 //Middleware
 app.use(bodyParser.urlencoded({extended: false}));

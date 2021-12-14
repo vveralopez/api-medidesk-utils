@@ -216,17 +216,15 @@ const getUsersLogin = async (req, res) => {
         if (existeUsuario) {
             var payload = datos.rows[0]['getvalusuario'];
             const tokenE = retornaToken(payload)
-            console.log(tokenE)
             const conecta = {
                 idusuario: JSON.parse(tokenR).idusuario,
                 vToken: tokenE
             }
-            console.log(conecta)
             const grabarToken = JSON.stringify({
                 idusuario: conecta.idusuario,
                 vToken: conecta.vToken
             })
-            console.log(grabarToken)
+
             const resul = await acceso.query('select public.postverificatoken($1)', [grabarToken])
             const retorno = eval(JSON.parse(resul.rows[0]['postverificatoken']['ret']))
 

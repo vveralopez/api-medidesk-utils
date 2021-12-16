@@ -16,6 +16,7 @@ module.exports = {
     PGUSERSICOM: limpiaBase64(process.env.PGUSERSICOM),
     PGUSERSICPW: limpiaBase64(process.env.PGUSERSICPW),
     SECRETO: limpiaBase64(process.env.SECRETO),
+//    SECRETO: process.env.SECRETO,
     CALCULOVAR: limpiaBase64(process.env.CALCULOVAR),
 }
 

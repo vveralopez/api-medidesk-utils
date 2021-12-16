@@ -1,13 +1,14 @@
 const { sicomer, acceso, data, calculo } = require('./entorno');
-const jwt = require('jsonwebtoken');
 const { base64encode } = require('nodejs-base64');
 const { CommandCompleteMessage } = require('pg-protocol/dist/messages');
+const jwt = require('jsonwebtoken');
 const secret = base64encode(data);
+//const secret = data;
 
 const getping = ("/ping", async (req, res) => {
     const database = await acceso.query("SELECT 1 + 1")
-        .then (() => "Servidor está levantado.")
-//        .catch(() => console.log(acceso))
+        .then(() => "Servidor está levantado.")
+        //        .catch(() => console.log(acceso))
         .catch(() => "Servidor está abajo.");
     res.status(200).json(database);
 });
@@ -39,8 +40,9 @@ const getAllEmpresas = async (req, res) => {
 const getProductos = async (req, res) => {
     const body = JSON.parse(req.query['Z']);
     const validaT = verificaToken(body);
-    const tokenR = JSON.parse(decodificaToken(body));
     if (validaT) {
+        const tokenR = JSON.parse(decodificaToken(body));
+
         //        sicomer.options['password'] = validaAcceso(tokenR['idempresa'], tokenR['idusuario']);
         const datos = await sicomer.query('select public.getproductos($1)', [tokenR]);
         if (datos.rows[0]['getproductos'] === null) {
@@ -62,7 +64,7 @@ const getStock = async (req, res) => {
         if (datos.rows[0]['getstock'] === null) {
             res.status(200).data = 'Sin datos que mostrar.';
         } else {
-            res.status(200).json(datos.rows[0]['getstock']);levantado
+            res.status(200).json(datos.rows[0]['getstock']); levantado
         }
     } else {
         res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
@@ -213,6 +215,7 @@ const getUsersLogin = async (req, res) => {
         const tokenR = decodificaToken(req.body.usuario)
         const datos = await acceso.query('select public.getvalusuario($1)', [tokenR])
         const existeUsuario = eval(datos.rows[0]['getvalusuario']['ret']);
+
         if (existeUsuario) {
             var payload = datos.rows[0]['getvalusuario'];
             const tokenE = retornaToken(payload)
@@ -237,7 +240,7 @@ const getUsersLogin = async (req, res) => {
             res.status(201).json('{"ret":"Clave o usuario inválido, reingrese."}')
         }
     } else {
-        res.status(40).json('{"ret":"Vermercl - Clave o usuario inválido, reingrese."}') 
+        res.status(400).json('{"ret":"Vermercl - Clave o usuario inválido, reingrese."}')
     }
 }
 
@@ -750,37 +753,11 @@ const postFindia = async (req, res) => {
     }
 }
 
-
 // Funciones de apoyo
 function decodificaToken(contenedor) {
     const tokenRet = JSON.stringify(jwt.decode(contenedor, secret, {
         algorithm: calculo
     }));
-    return tokenRet;
-}
-
-function codificaToken(contenedor) {
-    const tokenRet = JSON.stringify(jwt.sign(contenedor, secret, {
-        algorithm: calculo
-    }));
-
-    return tokenRet;
-}
-
-function verificaToken(contenedor) {
-    const val = jwt.verify(contenedor, secret, (err, verifiedJwt) => {
-        if (err) { return (false) } else { return (true) }
-    })
-    return val;
-}
-
-function retornaToken(contenedor) {
-    console.log(calculo)
-    const tokenRet = jwt.sign(contenedor, secret, {
-        expiresIn: 1440,
-        algorithm: calculo
-    })
-    console.log(tokenRet)
     return tokenRet;
 }
 
@@ -793,6 +770,34 @@ async function validaAcceso(idempresa, idusuario) {
             .catch((error) => console.log('Horror: ' + error))
     }
     catch (error) { console.log(error) }
+}
+
+function verificaToken(contenedor) {
+    const val = jwt.verify(contenedor, secret, (err, verifiedJwt) => {
+        if (err) {
+            return (false)
+        }
+        else {
+            return (true)
+        }
+    })
+    return val;
+}
+
+function retornaToken(contenedor) {
+    const tokenRet = jwt.sign(contenedor, secret, {
+        expiresIn: 1440,
+        algorithm: calculo
+    })
+    return tokenRet;
+}
+
+function codificaToken (contenedor) {
+    const tokenRet = JSON.stringify(jwt.sign(contenedor, secret, {
+        algorithm: calculo
+    }));
+
+    return tokenRet;
 }
 
 module.exports = {

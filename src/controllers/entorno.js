@@ -1,8 +1,7 @@
 const { Pool } = require('pg');
-const { PGUSERLOGIN, PGUSERSICOM, PGUSERLOGPW, PGUSERSICPW, PGPORT, PGHOSTNAME, SECRETO, CALCULOVAR } = require('./config');
-
-// const connStringAcceso = 'postgres://' + PGUSERLOGIN + ':' + PGUSERLOGPW + '@' + PGHOSTNAME + ':' + PGPORT + '/' + PGUSERLOGIN;
-// const connStringSicomer = 'postgres://' + PGUSERSICOM + ':' + PGUSERSICPW + '@' + PGHOSTNAME + ':' + PGPORT + '/' + PGUSERSICOM;
+const { PGUSERLOGIN, PGUSERSICOM, PGUSERLOGPW, 
+        PGUSERSICPW, PGPORT, PGHOSTNAME, 
+        SECRETO, CALCULOVAR } = require('./config');
 
 const acceso = new Pool({
     host: PGHOSTNAME,

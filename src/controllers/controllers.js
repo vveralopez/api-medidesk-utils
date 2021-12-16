@@ -38,20 +38,24 @@ const getAllEmpresas = async (req, res) => {
 }
 
 const getProductos = async (req, res) => {
-    const body = JSON.parse(req.query['Z']);
-    const validaT = verificaToken(body);
-    if (validaT) {
-        const tokenR = JSON.parse(decodificaToken(body));
+    try {
+        const body = JSON.parse(req.query['Z']);
+        const validaT = verificaToken(body);
+        if (validaT) {
+            const tokenR = JSON.parse(decodificaToken(body));
 
-        //        sicomer.options['password'] = validaAcceso(tokenR['idempresa'], tokenR['idusuario']);
-        const datos = await sicomer.query('select public.getproductos($1)', [tokenR]);
-        if (datos.rows[0]['getproductos'] === null) {
-            res.status(200).data = 'Sin datos que mostrar.';
+            //        sicomer.options['password'] = validaAcceso(tokenR['idempresa'], tokenR['idusuario']);
+            const datos = await sicomer.query('select public.getproductos($1)', [tokenR]);
+            if (datos.rows[0]['getproductos'] === null) {
+                res.status(200).data = 'Sin datos que mostrar.';
+            } else {
+                res.status(200).json(datos.rows[0]['getproductos']);
+            }
         } else {
-            res.status(200).json(datos.rows[0]['getproductos']);
+            res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
         }
-    } else {
-        res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
+    } catch (error) {
+        console.log('Error al leer productos: ', error)
     }
 }
 
@@ -95,27 +99,36 @@ const getTipopago = async (req, res) => {
 }
 
 const getallProveedores = async (req, res) => {
-    const body = JSON.parse(req.query['Z']);
-    const validaT = verificaToken(body);
-    const tokenR = JSON.parse(decodificaToken(body));
-    if (validaT) {
-        const datosUsuarios = await sicomer.query('select public.getallproveedores($1)', [tokenR])
-        res.status(200).json(datosUsuarios.rows[0]['getallproveedores'])
-    } else {
-        res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
+    try {
+        const body = JSON.parse(req.query['Z']);
+        const validaT = verificaToken(body);
+        if (validaT) {
+            const tokenR = JSON.parse(decodificaToken(body));
+            const datosUsuarios = await sicomer.query('select public.getallproveedores($1)', [tokenR])
+            res.status(200).json(datosUsuarios.rows[0]['getallproveedores'])
+        } else {
+            res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
+        }
+    } catch (error) {
+        console.log('Error al extraer proveedores: ', error)
     }
 }
 
 const getComunas = async (req, res) => {
-    const body = JSON.parse(req.query['Z']);
-    const validaT = verificaToken(body);
-    if (validaT) {
-        const datosUsuarios = await sicomer.query('select public.getcomunas()')
-        res.status(200).json(datosUsuarios.rows[0]['getcomunas'])
-    } else {
-        res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
+    try {
+        const body = JSON.parse(req.query['Z']);
+        const validaT = verificaToken(body);
+        if (validaT) {
+            const datosUsuarios = await sicomer.query('select public.getcomunas()')
+            res.status(200).json(datosUsuarios.rows[0]['getcomunas'])
+        } else {
+            res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
+        }
+    } catch (error) {
+        console.log('Error en lectura de comunas: ', error)
     }
 }
+
 
 const getRegiones = async (req, res) => {
     const body = JSON.parse(req.query['Z']);
@@ -425,27 +438,32 @@ const posttProductos = async (req, res) => {
 
 
 const postProductos = async (req, res) => {
-    const body = JSON.parse(req.body['body']);
-    const validaT = verificaToken(body);
-    const tokenDecoder = JSON.parse(decodificaToken(body));
-    const tokenAcceso = tokenDecoder['token'];
-    if (validaT) {
-        const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
-        const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
-        const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
-
-        if (puedeGrabar) {
-            const datos = await sicomer.query('select public.postgrabaproductos($1)', [tokenDecoder])
-            if (eval(datos.rows[0]['postgrabaproductos']['ret'])) {
-                res.status(200).json(datos.rows[0]['postgrabaproductos']);
+    try {
+        const body = JSON.parse(req.body['body']);
+        const validaT = verificaToken(body);
+        const tokenDecoder = JSON.parse(decodificaToken(body));
+        const tokenAcceso = tokenDecoder['token'];
+        if (validaT) {
+            const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
+            const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
+            const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
+            if (puedeGrabar) {
+console.log(tokenDecoder)
+                const datos = await sicomer.query('select public.postgrabaproductos($1)', [tokenDecoder])
+                if (eval(datos.rows[0]['postgrabaproductos']['ret'])) {
+                    console.log(datos.rows[0]['postgrabaproductos'])
+                    res.status(200).json(datos.rows[0]['postgrabaproductos']);
+                } else {
+                    res.status(201).json(datos.rows[0]['postgrabaproductos']);
+                }
             } else {
-                res.status(201).json(datos.rows[0]['postgrabaproductos']);
+                res.status(202).json('{"ret": "false", "registro": "token de datos no valido."}');
             }
         } else {
-            res.status(202).json('{"ret": "false", "registro": "token de datos no valido."}');
+            res.status(203).json('{"ret": "false", "registro": "token no valido."}');
         }
-    } else {
-        res.status(203).json('{"ret": "false", "registro": "token no valido."}');
+    } catch (error) {
+        console.log('Error al grabar productos: ', error)
     }
 }
 
@@ -792,7 +810,7 @@ function retornaToken(contenedor) {
     return tokenRet;
 }
 
-function codificaToken (contenedor) {
+function codificaToken(contenedor) {
     const tokenRet = JSON.stringify(jwt.sign(contenedor, secret, {
         algorithm: calculo
     }));

@@ -68,7 +68,7 @@ const getStock = async (req, res) => {
         if (datos.rows[0]['getstock'] === null) {
             res.status(200).data = 'Sin datos que mostrar.';
         } else {
-            res.status(200).json(datos.rows[0]['getstock']); levantado
+            res.status(200).json(datos.rows[0]['getstock']);
         }
     } else {
         res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
@@ -436,22 +436,19 @@ const posttProductos = async (req, res) => {
     }
 }
 
-
 const postProductos = async (req, res) => {
     try {
         const body = JSON.parse(req.body['body']);
         const validaT = verificaToken(body);
-        const tokenDecoder = JSON.parse(decodificaToken(body));
-        const tokenAcceso = tokenDecoder['token'];
         if (validaT) {
+            const tokenDecoder = JSON.parse(decodificaToken(body));
+            const tokenAcceso = tokenDecoder['token'];
             const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
             const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
             const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
             if (puedeGrabar) {
-console.log(tokenDecoder)
                 const datos = await sicomer.query('select public.postgrabaproductos($1)', [tokenDecoder])
                 if (eval(datos.rows[0]['postgrabaproductos']['ret'])) {
-                    console.log(datos.rows[0]['postgrabaproductos'])
                     res.status(200).json(datos.rows[0]['postgrabaproductos']);
                 } else {
                     res.status(201).json(datos.rows[0]['postgrabaproductos']);
@@ -584,9 +581,10 @@ const deletetproductos = async (req, res) => {
 const deleteOperaciones = async (req, res) => {
     const body = JSON.parse(req.query['Z']);
     const validaT = verificaToken(body);
-    const tokenDecoder = JSON.parse(decodificaToken(body));
-    const tokenAcceso = tokenDecoder['token'];
     if (validaT) {
+        const tokenDecoder = JSON.parse(decodificaToken(body));
+        const tokenAcceso = tokenDecoder['token'];
+
         const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
         const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
         const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
@@ -602,14 +600,14 @@ const deleteOperaciones = async (req, res) => {
     }
 }
 
-
 const deleteEmpresas = async (req, res) => {
     const body = JSON.parse(req.query['Z']);
     const validaT = verificaToken(body);
-    const tokenDecoder = JSON.parse(decodificaToken(body));
-    const tokenAcceso = tokenDecoder['token'];
 
     if (validaT) {
+        const tokenDecoder = JSON.parse(decodificaToken(body));
+        const tokenAcceso = tokenDecoder['token'];
+
         const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] +
             '","idempresa":"' + tokenDecoder['idemp'] +
             '", "tokencceso": "' + tokenAcceso + '"}');
@@ -673,22 +671,26 @@ const deleteProveedores = async (req, res) => {
 }
 
 const postOpecompras = async (req, res) => {
-
     const body = JSON.parse(req.body['body']);
     const validaT = verificaToken(body);
-    const tokenDecoder = JSON.parse(decodificaToken(body));
-    const tokenAcceso = tokenDecoder['token'];
-
     if (validaT) {
+        const tokenDecoder = JSON.parse(decodificaToken(body));
+        const tokenAcceso = tokenDecoder['token'];
         const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
         const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
         const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
+
         if (puedeGrabar) {
-            const datosUsuarios = await sicomer.query('select public.postgrabaopecpa($1)', [tokenDecoder.datos])
-            if (eval(datosUsuarios.rows[0]['postgrabaopecpa']['ret'])) {
-                res.status(200).json(datosUsuarios.rows[0]['postgrabaopecpa']);
-            } else {
-                res.status(201).json(datosUsuarios.rows[0]['postgrabaopecpa']);
+            try {
+                const datosUsuarios = await sicomer.query('select public.postgrabaopecpa($1)', [tokenDecoder.datos])
+                if (eval(datosUsuarios.rows[0]['postgrabaopecpa']['ret'])) {
+                    res.status(200).json(datosUsuarios.rows[0]['postgrabaopecpa']);
+                } else {
+                    res.status(201).json(datosUsuarios.rows[0]['postgrabaopecpa']);
+                }
+            }
+            catch (error) {
+                console.log('Error: ', error)
             }
         } else {
             res.status(202).json('{"ret": "false", "registro": "token acceso no valido."}');

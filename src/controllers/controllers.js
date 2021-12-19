@@ -221,14 +221,13 @@ const verificarToken = async (req, res) => {
     res.status(200).json(datos.rows[0]['getverificatoken']['ret']);
 }
 
-//Gestión del sistema
 const getUsersLogin = async (req, res) => {
     const validaT = verificaToken(req.body.usuario);
     if (validaT) {
         const tokenR = decodificaToken(req.body.usuario)
         const datos = await acceso.query('select public.getvalusuario($1)', [tokenR])
+        console.log('Usuario: ', datos.rows[0]['getvalusuario']['conected'])
         const existeUsuario = eval(datos.rows[0]['getvalusuario']['ret']);
-
         if (existeUsuario) {
             var payload = datos.rows[0]['getvalusuario'];
             const tokenE = retornaToken(payload)
@@ -240,10 +239,8 @@ const getUsersLogin = async (req, res) => {
                 idusuario: conecta.idusuario,
                 vToken: conecta.vToken
             })
-
             const resul = await acceso.query('select public.postverificatoken($1)', [grabarToken])
             const retorno = eval(JSON.parse(resul.rows[0]['postverificatoken']['ret']))
-
             if (retorno) {
                 res.status(200).json(tokenE)
             } else {
@@ -254,6 +251,7 @@ const getUsersLogin = async (req, res) => {
         }
     } else {
         res.status(400).json('{"ret":"Vermercl - Clave o usuario inválido, reingrese."}')
+
     }
 }
 

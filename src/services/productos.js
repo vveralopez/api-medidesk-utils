@@ -19,31 +19,39 @@ exports.getProductos = async (req, res) => {
             res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
         }
     } catch (error) {
-        console.log('Error al leer productos: ', error)
+        console.log('Error al leer getProductos: ', error)
     }
 }
 
 exports.getProveedores = async (req, res) => {
-    const body = JSON.parse(req.query['Z']);
-    const validaT = token.verificaToken(body);
-    const tokenR = JSON.parse(token.decodificaToken(body));
-    if (validaT) {
-        const datos = await sicomer.query('select public.getproveedores($1)', [tokenR])
-        res.status(200).json(datos.rows[0]['getproveedores'])
-    } else {
-        res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
+    try {
+        const body = JSON.parse(req.query['Z']);
+        const validaT = token.verificaToken(body);
+        const tokenR = JSON.parse(token.decodificaToken(body));
+        if (validaT) {
+            const datos = await sicomer.query('select public.getproveedores($1)', [tokenR])
+            res.status(200).json(datos.rows[0]['getproveedores'])
+        } else {
+            res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
+        }
+    } catch (error) {
+        console.log('Error al leer getProveedores: ', error)
     }
 }
 
 exports.getTproductos = async (req, res) => {
-    const body = JSON.parse(req.query['Z']);
-    const validaT = token.verificaToken(body);
-    const tokenR = JSON.parse(token.decodificaToken(body));
-    if (validaT) {
-        const datos = await sicomer.query('select public.gettproductos($1)', [tokenR])
-        res.status(200).json(datos.rows[0]['gettproductos']);
-    } else {
-        res.status(203).json('{"ret":"false", "conected":"Token incorrecto."}');
+    try {
+        const body = JSON.parse(req.query['Z']);
+        const validaT = token.verificaToken(body);
+        const tokenR = JSON.parse(token.decodificaToken(body));
+        if (validaT) {
+            const datos = await sicomer.query('select public.gettproductos($1)', [tokenR])
+            res.status(200).json(datos.rows[0]['gettproductos']);
+        } else {
+            res.status(203).json('{"ret":"false", "conected":"Token incorrecto."}');
+        }
+    } catch (error) {
+        console.log('Error al leer getTproductos: ', error)
     }
 }
 
@@ -76,28 +84,32 @@ exports.postProductos = async (req, res) => {
 }
 
 exports.deleteProductos = async (req, res) => {
-    const body = JSON.parse(req.query['Z']);
-    const validaT = token.verificaToken(body);
-    const tokenDecoder = JSON.parse(token.decodificaToken(body));
-    const tokenAcceso = tokenDecoder['token'];
+    try {
+        const body = JSON.parse(req.query['Z']);
+        const validaT = token.verificaToken(body);
+        const tokenDecoder = JSON.parse(token.decodificaToken(body));
+        const tokenAcceso = tokenDecoder['token'];
 
-    if (validaT) {
-        const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
-        const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
-        const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
+        if (validaT) {
+            const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
+            const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
+            const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
 
-        if (puedeGrabar) {
-            const datos = await sicomer.query('select sicomer.public.deleteproductos($1)', [tokenDecoder])
-            if (eval(datos.rows[0]['deleteproductos']['ret'])) {
-                res.status(200).json(datos.rows[0]['deleteproductos']);
+            if (puedeGrabar) {
+                const datos = await sicomer.query('select sicomer.public.deleteproductos($1)', [tokenDecoder])
+                if (eval(datos.rows[0]['deleteproductos']['ret'])) {
+                    res.status(200).json(datos.rows[0]['deleteproductos']);
+                } else {
+                    res.status(201).json(datos.rows[0]['deleteproductos']);
+                }
             } else {
-                res.status(201).json(datos.rows[0]['deleteproductos']);
+                res.status(201).json('{"ret": "false", "registro": "token acceso no valido."}');
             }
         } else {
-            res.status(201).json('{"ret": "false", "registro": "token acceso no valido."}');
+            res.status(202).json('{"ret": "false", "registro": "token de datos no valido."}');
         }
-    } else {
-        res.status(202).json('{"ret": "false", "registro": "token de datos no valido."}');
+    } catch (error) {
+        console.log('Error al leer deleteProductos: ', error)
     }
 }
 
@@ -118,46 +130,54 @@ exports.getallProveedores = async (req, res) => {
 }
 
 exports.postProveedores = async (req, res) => {
-    const body = JSON.parse(req.body['body']);
-    const validaT = token.verificaToken(body);
-    const tokenDecoder = JSON.parse(token.decodificaToken(body));
-    const tokenAcceso = tokenDecoder['token'];
-    if (validaT) {
-        const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
-        const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
-        const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
-        if (puedeGrabar) {
-            const datos = await sicomer.query('select public.postgrabatproveedores($1)', [tokenDecoder])
-            if (eval(datos.rows[0]['postgrabatproveedores']['ret'])) {
-                res.status(200).json(datos.rows[0]['postgrabatproveedores']);
+    try {
+        const body = JSON.parse(req.body['body']);
+        const validaT = token.verificaToken(body);
+        const tokenDecoder = JSON.parse(token.decodificaToken(body));
+        const tokenAcceso = tokenDecoder['token'];
+        if (validaT) {
+            const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
+            const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
+            const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
+            if (puedeGrabar) {
+                const datos = await sicomer.query('select public.postgrabatproveedores($1)', [tokenDecoder])
+                if (eval(datos.rows[0]['postgrabatproveedores']['ret'])) {
+                    res.status(200).json(datos.rows[0]['postgrabatproveedores']);
+                } else {
+                    res.status(201).json(datos.rows[0]['postgrabatproveedores']);
+                }
             } else {
-                res.status(201).json(datos.rows[0]['postgrabatproveedores']);
+                res.status(202).json('{"ret": "false", "registro": "token de datos no valido."}');
             }
         } else {
-            res.status(202).json('{"ret": "false", "registro": "token de datos no valido."}');
+            res.status(203).json('{"ret": "false", "registro": "token no valido."}');
         }
-    } else {
-        res.status(203).json('{"ret": "false", "registro": "token no valido."}');
+    } catch (error) {
+        console.log('Error al leer postProveedores: ', error)
     }
 }
 
 exports.deleteProveedores = async (req, res) => {
-    const body = JSON.parse(req.data['Z']);
-    const validaT = token.verificaToken(body);
-    const tokenDecoder = JSON.parse(token.decodificaToken(body));
-    const tokenAcceso = tokenDecoder['token'];
-    if (validaT) {
-        const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
-        const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
-        const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
-        if (puedeGrabar) {
-            const datos = await sicomer.query('select sicomer.public.deleteproveedores($1)', [tokenDecoder])
-            res.status(200).json(datos.rows[0]['deleteproveedores']);
+    try {
+        const body = JSON.parse(req.data['Z']);
+        const validaT = token.verificaToken(body);
+        const tokenDecoder = JSON.parse(token.decodificaToken(body));
+        const tokenAcceso = tokenDecoder['token'];
+        if (validaT) {
+            const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
+            const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
+            const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
+            if (puedeGrabar) {
+                const datos = await sicomer.query('select sicomer.public.deleteproveedores($1)', [tokenDecoder])
+                res.status(200).json(datos.rows[0]['deleteproveedores']);
+            } else {
+                res.status(201).json('{"ret": "false", "registro": "token acceso no valido."}');
+            }
         } else {
-            res.status(201).json('{"ret": "false", "registro": "token acceso no valido."}');
+            res.status(202).json('{"ret": "false", "registro": "token de datos no valido."}');
         }
-    } else {
-        res.status(202).json('{"ret": "false", "registro": "token de datos no valido."}');
+    } catch (error) {
+        console.log('Error al leer deleteProveedores: ', error)
     }
 }
 
@@ -184,45 +204,53 @@ exports.getProductos = async (req, res) => {
 }
 
 exports.posttProductos = async (req, res) => {
-    const body = JSON.parse(req.body['body']);
-    const validaT = token.verificaToken(body);
-    const tokenDecoder = JSON.parse(token.decodificaToken(body));
-    const tokenAcceso = tokenDecoder['token'];
-    if (validaT) {
-        const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
-        const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
-        const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
-        if (puedeGrabar) {
-            const datos = await sicomer.query('select public.postgrabatproductos($1)', [tokenDecoder])
-            if (eval(datos.rows[0]['postgrabatproductos']['ret'])) {
-                res.status(200).json(datos.rows[0]['postgrabatproductos']);
+    try {
+        const body = JSON.parse(req.body['body']);
+        const validaT = token.verificaToken(body);
+        const tokenDecoder = JSON.parse(token.decodificaToken(body));
+        const tokenAcceso = tokenDecoder['token'];
+        if (validaT) {
+            const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
+            const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
+            const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
+            if (puedeGrabar) {
+                const datos = await sicomer.query('select public.postgrabatproductos($1)', [tokenDecoder])
+                if (eval(datos.rows[0]['postgrabatproductos']['ret'])) {
+                    res.status(200).json(datos.rows[0]['postgrabatproductos']);
+                } else {
+                    res.status(201).json(datos.rows[0]['postgrabatproductos']);
+                }
             } else {
-                res.status(201).json(datos.rows[0]['postgrabatproductos']);
+                res.status(202).json('{"ret": "false", "registro": "token de datos no valido."}');
             }
         } else {
-            res.status(202).json('{"ret": "false", "registro": "token de datos no valido."}');
+            res.status(203).json('{"ret": "false", "registro": "token no valido."}');
         }
-    } else {
-        res.status(203).json('{"ret": "false", "registro": "token no valido."}');
+    } catch (error) {
+        console.log('Error al leer posttProductos: ', error)
     }
 }
 
 exports.deletetproductos = async (req, res) => {
-    const body = JSON.parse(req.query['Z']);
-    const validaT = token.verificaToken(body);
-    const tokenDecoder = JSON.parse(token.decodificaToken(body));
-    const tokenAcceso = tokenDecoder['token'];
-    if (validaT) {
-        const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
-        const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
-        const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
-        if (puedeGrabar) {
-            const datos = await sicomer.query('select public.deletetproductos($1)', [tokenDecoder])
-            res.status(200).json(datos.rows[0]['deletetproductos']);
+    try {
+        const body = JSON.parse(req.query['Z']);
+        const validaT = token.verificaToken(body);
+        const tokenDecoder = JSON.parse(token.decodificaToken(body));
+        const tokenAcceso = tokenDecoder['token'];
+        if (validaT) {
+            const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] + '", "tokenAcceso": "' + tokenAcceso + '"}')
+            const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
+            const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
+            if (puedeGrabar) {
+                const datos = await sicomer.query('select public.deletetproductos($1)', [tokenDecoder])
+                res.status(200).json(datos.rows[0]['deletetproductos']);
+            } else {
+                res.status(201).json('{"ret": "false", "registro": "token acceso no valido."}');
+            }
         } else {
-            res.status(201).json('{"ret": "false", "registro": "token acceso no valido."}');
+            res.status(202).json('{"ret": "false", "registro": "token de datos no valido."}');
         }
-    } else {
-        res.status(202).json('{"ret": "false", "registro": "token de datos no valido."}');
+    } catch (error) {
+        console.log('Error al leer deletetproductos: ', error)
     }
 }

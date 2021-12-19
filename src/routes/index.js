@@ -39,7 +39,7 @@ router.put('/menu/cambiaclave', gral.putcambiaClave);
 router.get('/menu/users', gral.getUsers);
 router.post('/menu/users', gral.postUsers);
 router.put('/menu/users', gral.putUsers);
-router.get('/menu/users/select', gral.getesas);
+router.get('/menu/users/select', empr.getEmpresas);
 //Manejo de esas
 router.get('/menu/empresas', empr.getAllEmpresas);
 router.post('/menu/empresas', empr.postEmpresas);

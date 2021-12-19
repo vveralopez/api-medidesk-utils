@@ -226,8 +226,6 @@ const getUsersLogin = async (req, res) => {
     if (validaT) {
         const tokenR = decodificaToken(req.body.usuario)
         const datos = await acceso.query('select public.getvalusuario($1)', [tokenR])
-        console.log('Usuario: ', datos.rows[0]['getvalusuario']['conected'])
-        console.log('Datos Conexión: ', tokenR)
         const existeUsuario = eval(datos.rows[0]['getvalusuario']['ret']);
         if (existeUsuario) {
             var payload = datos.rows[0]['getvalusuario'];

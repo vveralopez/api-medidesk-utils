@@ -30,8 +30,8 @@ const getAllEmpresas = async (req, res) => {
     const validaT = verificaToken(body);
     const tokenR = JSON.parse(decodificaToken(body));
     if (validaT) {
-        const datos = await acceso.query('select public.getallempresas()');
-        res.status(200).json(datos.rows[0]['getallempresas']);
+        const datos = await acceso.query('select public.getallesas()');
+        res.status(200).json(datos.rows[0]['getallesas']);
     } else {
         res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
     }
@@ -44,7 +44,7 @@ const getProductos = async (req, res) => {
         if (validaT) {
             const tokenR = JSON.parse(decodificaToken(body));
 
-            //        sicomer.options['password'] = validaAcceso(tokenR['idempresa'], tokenR['idusuario']);
+            //        sicomer.options['password'] = validaAcceso(tokenR['idesa'], tokenR['idusuario']);
             const datos = await sicomer.query('select public.getproductos($1)', [tokenR]);
             if (datos.rows[0]['getproductos'] === null) {
                 res.status(200).data = 'Sin datos que mostrar.';
@@ -300,8 +300,8 @@ const getFlujoCajaProd = async (req, res) => {
     const validaT = verificaToken(body);
     const tokenR = JSON.parse(decodificaToken(body));
     if (validaT) {
-        const datos = await sicomer.query('select public.getflcajadetaprd($1)', [tokenR])
-        res.status(200).json(datos.rows[0]['getflcajadetaprd']);
+        const datos = await sicomer.query('select public.getflcajadeta($1)', [tokenR])
+        res.status(200).json(datos.rows[0]['getflcajadeta']);
     } else {
         res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
     }
@@ -395,11 +395,11 @@ const postEmpresas = async (req, res) => {
         const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
         const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
         if (puedeGrabar) {
-            const datosUsuarios = await acceso.query('select public.postgrabaempresa($1)', [tokenDecoder])
-            if (eval(datosUsuarios.rows[0]['postgrabaempresa']['ret'])) {
-                res.status(200).json(datosUsuarios.rows[0]['postgrabaempresa']);
+            const datosUsuarios = await acceso.query('select public.postgrabaesa($1)', [tokenDecoder])
+            if (eval(datosUsuarios.rows[0]['postgrabaesa']['ret'])) {
+                res.status(200).json(datosUsuarios.rows[0]['postgrabaesa']);
             } else {
-                res.status(201).json(datosUsuarios.rows[0]['postgrabaempresa']);
+                res.status(201).json(datosUsuarios.rows[0]['postgrabaesa']);
             }
         } else {
             res.status(202).json('{"ret": "false", "registro": "token acceso no valido."}');
@@ -606,13 +606,13 @@ const deleteEmpresas = async (req, res) => {
         const tokenAcceso = tokenDecoder['token'];
 
         const preparaJson = JSON.parse('{"idusuario": "' + tokenDecoder['idusuario'] +
-            '","idempresa":"' + tokenDecoder['idemp'] +
+            '","idesa":"' + tokenDecoder['idemp'] +
             '", "tokencceso": "' + tokenAcceso + '"}');
         const valToken = await acceso.query('select public.gettokenusers($1)', [preparaJson])
         const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
         if (puedeGrabar) {
-            const datos = await acceso.query('select public.deleteempresa($1)', [tokenDecoder])
-            res.status(200).json(datos.rows[0]['deleteempresa']);
+            const datos = await acceso.query('select public.deleteesa($1)', [tokenDecoder])
+            res.status(200).json(datos.rows[0]['deleteesa']);
         } else {
             res.status(201).json('{"ret": "false", "registro": "token acceso no valido."}');
         }
@@ -778,9 +778,9 @@ function decodificaToken(contenedor) {
     return tokenRet;
 }
 
-async function validaAcceso(idempresa, idusuario) {
+async function validaAcceso(idesa, idusuario) {
     try {
-        const val = JSON.stringify({ idempresa, idusuario });
+        const val = JSON.stringify({ idesa, idusuario });
         sicomer.options['user'] = idusuario;
         const dato = await acceso.query('select public.getaccesosistema($1)', [JSON.parse(val)])
             .then(r => { return (JSON.stringify(r.rows[0]['getaccesosistema'])) })

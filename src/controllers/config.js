@@ -2,7 +2,6 @@ require('dotenv').config();
 const { base64decode } = require('nodejs-base64');
 
 const limpiaBase64 = (data) => {
-    //console.log([data])
     return base64decode(data).replace("\n", "");
 }
 

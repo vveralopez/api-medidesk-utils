@@ -46,6 +46,7 @@ exports.postEmpresas = async (req, res) => {
             const puedeGrabar = eval(valToken.rows[0]['gettokenusers']['ret']);
             if (puedeGrabar) {
                 const datosUsuarios = await acceso.query('select public.postgrabaempresa($1)', [tokenDecoder])
+                console.log(datosUsuarios.rows[0]['postgrabaesa'])
                 if (eval(datosUsuarios.rows[0]['postgrabaesa']['ret'])) {
                     res.status(200).json(datosUsuarios.rows[0]['postgrabaempresa']);
                 } else {

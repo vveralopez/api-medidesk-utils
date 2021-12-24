@@ -2,7 +2,8 @@ FROM node:alpine
 WORKDIR /app/apirest
 
 COPY package*.json ./
-RUN npm install
+
+RUN yarn install
 
 COPY . .
 

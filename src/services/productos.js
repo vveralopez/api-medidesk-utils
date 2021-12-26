@@ -7,9 +7,9 @@ exports.getProductos = async (req, res) => {
         const validaT = token.verificaToken(body);
         if (validaT) {
             const tokenR = JSON.parse(token.decodificaToken(body));
-
             //        sicomer.options['password'] = validaAcceso(tokenR['idesa'], tokenR['idusuario']);
             const datos = await sicomer.query('select public.getproductos($1)', [tokenR]);
+            console.log(datos.rows[0]['getproductos'])
             if (datos.rows[0]['getproductos'] === null) {
                 res.status(200).data = 'Sin datos que mostrar.';
             } else {

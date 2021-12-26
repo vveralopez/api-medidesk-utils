@@ -8,7 +8,7 @@ const acceso = new Pool({
     user: PGUSERLOGIN,
     password: PGUSERLOGPW,
     database: PGUSERLOGIN,
-    port: parseInt(PGPORT)
+    port: PGPORT
 })
 
 acceso.connect((err, client, release) => {
@@ -31,7 +31,7 @@ const sicomer = new Pool({
     user: PGUSERSICOM,
     password: PGUSERSICPW,
     database: PGUSERSICOM,
-    port: parseInt(PGPORT)
+    port: PGPORT
 })
 
 sicomer.connect((err, client, release) => {

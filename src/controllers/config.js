@@ -1,22 +1,21 @@
 require('dotenv').config();
 const { base64decode } = require('nodejs-base64');
 
-const limpiaBase64 = (data) => {
-    return base64decode(data).replace("\n", "");
-}
+// const limpiaBase64 = (data) => {
+//     return base64decode(data).replace("\n", "");
+// }
 
 module.exports = {
     NODE_ENV: process.env.NODE_ENV,
-    PORT: parseInt(limpiaBase64(process.env.PORT )),
-    PGPORT: parseInt(limpiaBase64(process.env.PGPORT)),
-    PGHOSTNAME: limpiaBase64(process.env.PGHOSTNAME),
-    PGUSERLOGIN: limpiaBase64(process.env.PGUSERLOGIN),
-    PGUSERLOGPW: limpiaBase64(process.env.PGUSERLOGPW),
-    PGUSERSICOM: limpiaBase64(process.env.PGUSERSICOM),
-    PGUSERSICPW: limpiaBase64(process.env.PGUSERSICPW),
-    SECRETO: limpiaBase64(process.env.SECRETO),
-//    SECRETO: process.env.SECRETO,
-    CALCULOVAR: limpiaBase64(process.env.CALCULOVAR),
+    PORT: process.env.PORT,
+    PGPORT: process.env.PGPORT,
+    PGHOSTNAME: process.env.PGHOSTNAME,
+    PGUSERLOGIN: process.env.PGUSERLOGIN,
+    PGUSERLOGPW:process.env.PGUSERLOGPW,
+    PGUSERSICOM: process.env.PGUSERSICOM,
+    PGUSERSICPW: process.env.PGUSERSICPW,
+    SECRETO: process.env.SECRETO,
+    CALCULOVAR: process.env.CALCULOVAR,
 }
 
 // module.exports = {

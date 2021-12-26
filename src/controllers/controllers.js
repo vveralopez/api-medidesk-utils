@@ -8,7 +8,6 @@ const secret = base64encode(data);
 const getping = ("/ping", async (req, res) => {
     const database = await acceso.query("SELECT 1 + 1")
         .then(() => "Servidor está levantado.")
-        //        .catch(() => console.log(acceso))
         .catch(() => "Servidor está abajo.");
     res.status(200).json(database);
 });
@@ -687,7 +686,7 @@ const postOpecompras = async (req, res) => {
                 }
             }
             catch (error) {
-                console.log('Error: ', error)
+                console.log('Error en postOpecompras: ', error)
             }
         } else {
             res.status(202).json('{"ret": "false", "registro": "token acceso no valido."}');
@@ -784,7 +783,7 @@ async function validaAcceso(idesa, idusuario) {
         sicomer.options['user'] = idusuario;
         const dato = await acceso.query('select public.getaccesosistema($1)', [JSON.parse(val)])
             .then(r => { return (JSON.stringify(r.rows[0]['getaccesosistema'])) })
-            .catch((error) => console.log('Horror: ' + error))
+            .catch((error) => console.log('Error en validaAcceso: ' + error))
     }
     catch (error) { console.log(error) }
 }

@@ -102,7 +102,7 @@ exports.postOpecompras = async (req, res) => {
                     }
                 }
                 catch (error) {
-                    console.log('Error: ', error)
+                    console.log('Error postOpecompras: ', error)
                 }
             } else {
                 res.status(202).json('{"ret": "false", "registro": "token acceso no valido."}');
@@ -160,13 +160,10 @@ exports.deleteOperaciones = async (req, res) => {
 exports.getFlujoCaja = async (req, res) => {
     try {
         const body = JSON.parse(req.query['Z']);
-        console.log(body)
         const validaT = token.verificaToken(body);
-        console.log(validaT)
         const tokenR = JSON.parse(token.decodificaToken(body));
 
         if (validaT) {
-            console.log(tokenR)
             const datos = await sicomer.query('select public.getflujoscajaop($1)', [tokenR])
             res.status(200).json(datos.rows[0]['getflujoscajaop']);
         } else {

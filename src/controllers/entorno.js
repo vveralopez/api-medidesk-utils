@@ -13,8 +13,6 @@ const acceso = new Pool({
 
 acceso.connect((err, client, release) => {
     if (err) {
-        console.log('Obteniendo Error de Acceso')
-        console.log(acceso.options)
         return console.error('Error conectando con Acceso: ', err.stack)
     }
     client.query('SELECT NOW()', (err, result) => {
@@ -36,8 +34,6 @@ const sicomer = new Pool({
 
 sicomer.connect((err, client, release) => {
     if (err) {
-        console.log('Obteniendo Error de Sicomer')
-        console.log(sicomer.options)
         return console.error('Error conectando con Sicomer: ', err.stack)
     }
     client.query('SELECT NOW()', (err, result) => {

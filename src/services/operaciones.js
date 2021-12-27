@@ -1,6 +1,46 @@
 const { sicomer, acceso } = require('../controllers/entorno');
 const token = require('../utils/validaToken')
 
+exports.getTotalVentas = async (req, res) => {
+    try {
+        const body = JSON.parse(req.query['Z']);
+        const validaT = token.verificaToken(body);
+        const tokenR = JSON.parse(token.decodificaToken(body));
+        if (validaT) {
+            const datos = await sicomer.query('select public.getTotalVentas($1)', [tokenR])
+            if (datos.rows[0]['getTotalVentas'] === null) {
+                res.status(200).data = 'Sin datos que mostrar.';
+            } else {
+                res.status(200).json(datos.rows[0]['getTotalVentas']);
+            }
+        } else {
+            res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
+        }
+    } catch (error) {
+        console.log('Error en getTotalVentas: ', error)
+    }
+}
+
+exports.getDetalleVentas = async (req, res) => {
+    try {
+        const body = JSON.parse(req.query['Z']);
+        const validaT = token.verificaToken(body);
+        const tokenR = JSON.parse(token.decodificaToken(body));
+        if (validaT) {
+            const datos = await sicomer.query('select public.getDetalleVentas($1)', [tokenR])
+            if (datos.rows[0]['getDetalleVentas'] === null) {
+                res.status(200).data = 'Sin datos que mostrar.';
+            } else {
+                res.status(200).json(datos.rows[0]['getDetalleVentas']);
+            }
+        } else {
+            res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
+        }
+    } catch (error) {
+        console.log('Error en getDetalleVentas: ', error)
+    }
+}
+
 exports.getStock = async (req, res) => {
     try {
         const body = JSON.parse(req.query['Z']);

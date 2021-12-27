@@ -86,9 +86,10 @@ router.get('/menu/qproductos', prd.getProductos);
 router.get('/menu/inicio', gral.getFechasistema);
 router.post('/menu/inicio', gral.postFechasdia);
 router.post('/menu/fin', gral.postFindia);
-
-//Inicio y Fin de dia
-router.get('/menu/dashboard', opes.getFlujoCaja);
-router.get('/menu/dashboard/prod', opes.getFlujoCajaProd);
+//DashBoards
+// router.get('/menu/dashboard', opes.getFlujoCaja);
+// router.get('/menu/dashboard/prod', opes.getFlujoCajaProd);
+router.get('/menu/dashboard', opes.getTotalVentas);
+router.get('/menu/dashboard/prod', opes.getDetalleVentas);
 
 module.exports = router;

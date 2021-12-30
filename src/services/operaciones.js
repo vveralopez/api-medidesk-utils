@@ -8,10 +8,10 @@ exports.getTotalVentas = async (req, res) => {
         const tokenR = JSON.parse(token.decodificaToken(body));
         if (validaT) {
             const datos = await sicomer.query('select public.getTotalVentas($1)', [tokenR])
-            if (datos.rows[0]['getTotalVentas'] === null) {
+            if (datos.rows[0]['gettotalventas'] === null) {
                 res.status(200).data = 'Sin datos que mostrar.';
             } else {
-                res.status(200).json(datos.rows[0]['getTotalVentas']);
+                res.status(200).json(datos.rows[0]['gettotalventas']);
             }
         } else {
             res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');
@@ -28,10 +28,10 @@ exports.getDetalleVentas = async (req, res) => {
         const tokenR = JSON.parse(token.decodificaToken(body));
         if (validaT) {
             const datos = await sicomer.query('select public.getDetalleVentas($1)', [tokenR])
-            if (datos.rows[0]['getDetalleVentas'] === null) {
+            if (datos.rows[0]['getdetalleventas'] === null) {
                 res.status(200).data = 'Sin datos que mostrar.';
             } else {
-                res.status(200).json(datos.rows[0]['getDetalleVentas']);
+                res.status(200).json(datos.rows[0]['getdetalleventas']);
             }
         } else {
             res.status(201).json('{"ret":"false", "conected":"Token incorrecto."}');

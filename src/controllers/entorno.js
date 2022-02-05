@@ -41,7 +41,7 @@ sicomer.connect((err, client, release) => {
         if (err) {
             return console.error('Error ejecutando query: ', err.stack)
         }
-        console.log('Conectado a BBDD Comercio: ' + JSON.stringify(result.rows))
+        console.log('Conectado a BBDD del Sistema: ' + JSON.stringify(result.rows))
     })
 })
 

@@ -1,5 +1,0 @@
-::1 - - [08/Jan/2022:17:34:08 +0000] "GET /producto HTTP/1.1" 404 83 "-" "PostmanRuntime/7.26.10"
-::1 - - [08/Jan/2022:17:34:48 +0000] "GET /producto HTTP/1.1" 404 83 "-" "PostmanRuntime/7.26.10"
-::1 - - [08/Jan/2022:17:35:18 +0000] "GET /producto HTTP/1.1" 404 83 "-" "PostmanRuntime/7.26.10"
-::1 - - [08/Jan/2022:17:36:24 +0000] "GET /producto/producto HTTP/1.1" - - "-" "PostmanRuntime/7.26.10"
-::1 - - [08/Jan/2022:17:38:37 +0000] "GET /gateway/producto HTTP/1.1" - - "-" "PostmanRuntime/7.26.10"

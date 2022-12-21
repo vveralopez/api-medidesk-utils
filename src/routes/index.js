@@ -1,12 +1,14 @@
 const { Router } = require('express');
 const router = Router();
+const { check } = require('express-validator');
+const utils = require('../services/utils');
 
-// const gral = require('../services/generales');
-const prd  = require('../services/productos');
+router.get('/examen/:parametro',
+[check('parametro').isJSON().withMessage('Enviar parametros para obtener datos.')],
+utils.getExamen);
 
-// const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
-// router.use(morgan('combined', { stream: accessLogStream }))
-
-router.get('/:parametro', prd.getProductos);
+router.get('/medicamento/:parametro',
+[check('parametro').isJSON().withMessage('Enviar parametros para obtener datos.')],
+utils.getMedicamento);
 
 module.exports = router;

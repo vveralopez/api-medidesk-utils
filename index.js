@@ -7,7 +7,7 @@ const routesBase = require('./src/utils/base');
 const messageResponse = require('./src/utils/messageResponse');
 const config = require('./src/controllers/config')
 const helmet = require('helmet');
-const routeProductos = require('./src/routes/index')
+const routeMedideskUtils = require('../api-medidesk-utils/src/routes/index')
 const logger = require('./src/utils/logger');
 
 //Middleware
@@ -36,7 +36,8 @@ app.get('/vermercl', function(req, res) {
   res.send('Propiedad de Vermer It Solutions');
 });
 
-app.use('/producto', cors(corsOptions), routeProductos);
+//app.use('/producto', cors(corsOptions), routeProductos);
+app.use('/utils', cors(corsOptions), routeMedideskUtils);
 app.use('*', routesBase);
 
 app.use((err, req, res, next) => {

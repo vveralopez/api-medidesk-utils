@@ -1,8 +1,8 @@
 const HttpStatus = require('http-status-codes');
-const messageResponse = require('../../../api-medidesk-utils/src/utils/messageResponse');
-const { sicomer } = require('../../../api-medidesk-utils/src/controllers/entorno');
-const token = require('../../../api-medidesk-utils/src/utils/validaToken')
-const logger = require('../../../api-medidesk-utils/src/utils/logger');
+const messageResponse = require('../utils/messageResponse');
+const { sicomer } = require('../controllers/entorno');
+const token = require('../utils/validaToken')
+const logger = require('../utils/logger');
 
 exports.getExamen = async (req, res) => {
     try {

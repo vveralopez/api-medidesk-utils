@@ -1,13 +1,10 @@
-FROM node:alpine
-WORKDIR /app/apirest
+FROM node:latest
+
+WORKDIR /api-medidesk-utils
 
 COPY package*.json ./
+COPY . .
 
 RUN yarn install
 
-COPY . .
-
-EXPOSE 3000
-CMD ["npm", "run", "start"]
-
-
+CMD ["yarn", "start"]
